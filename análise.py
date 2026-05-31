@@ -26,7 +26,7 @@ print(df_csv.isnull().sum())  # contagem de valores nulos por coluna
 print(df_csv.isnull().mean()*100)
 
 #Convertendo Strings Vazias
-df_csv = df_csv.replace({'Null':np.nan, 'N/A':np.nan, '':np.nan})
+df_csv = df_csv.replace({'Null':np.nan, 'N/A':np.nan, '':np.nan, '#N/D':np.nan})
 print(df_csv.isnull().sum())
 
 #Removendo Colunas Vazias 
@@ -63,3 +63,29 @@ print(df_csv.head())
 
 #Estatísticas Descritivas para a Coluna Número de Filhos
 print(df_csv['CL_FHL'].describe())
+
+#Padrões de Agrupamento
+#Agrupamento por Categoria
+# Pivot Table - Quantidade por Categoria e Gênero
+pivot = df_csv.pivot_table(
+    values='PR_ID',
+    index='PR_CAT',
+    columns='CL_GENERO',
+    aggfunc='count',
+    fill_value=0
+)
+
+print(pivot)
+
+# Agrupamento por Gênero
+resumo_genero = df_csv.groupby("CL_GENERO").agg(
+    Quantidade=("PR_ID", "count"),
+    Media_Filhos=("CL_FHL", "mean"),
+).sort_values("Quantidade", ascending=False)
+
+print(resumo_genero)
+
+# Salvar dados limpos em novo CSV
+df_csv.to_csv("Base_Varejo_Limpa.csv", index=False, sep=";")
+print("Arquivo salvo com sucesso!")
+print(df_csv.shape)
