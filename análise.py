@@ -150,4 +150,8 @@ print("Arquivo salvo com sucesso!")
 print(df_csv.shape)
 
 
-
+print(df_csv['PR_CAT'].value_counts().head(3))
+print()
+print(df_csv['CL_GENERO'].value_counts())
+print()
+print(df_csv['CL_FHL'].describe())
